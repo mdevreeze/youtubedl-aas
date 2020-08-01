@@ -1,0 +1,6 @@
+version: '3'
+services: 
+  youtubedl-aas:
+    image: "docker-youtubedl-aas-tests"
+    ports:
+      - "8000:80"

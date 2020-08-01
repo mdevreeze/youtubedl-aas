@@ -1,0 +1,14 @@
+{
+  "cSpell.words": [
+    "Buefy",
+    "beufy",
+    "moviepy",
+    "orjson",
+    "outtmpl",
+    "pydantic",
+    "pygifsicle",
+    "pylint",
+    "uvicorn"
+  ],
+  "python.linting.pylintEnabled": true
+}

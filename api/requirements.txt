@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+youtube_dl
+pydantic
+moviepy
+proglog
+pygifsicle
+orjson
+redis
+jinja2
+aiofiles

@@ -1,0 +1,12 @@
+### Start download
+POST http://localhost:8000/
+Content-Type: application/json
+
+{
+  "url": "https://www.youtube.com/watch?v=Smwqr8vCzSw",
+  "optimize": false
+}
+
+### Get status
+# GET http://localhost:8000/ee5d4be5-e56f-48c7-b248-60187004db0b/status
+GET http://localhost:8000/2503ef05-8cf7-4731-b329-5e08dca96817/status
