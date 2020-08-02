@@ -19,4 +19,4 @@ def get_status(identifier):
 def set_status(progress: Progress):
     con = get_redis_connection()
     json_str = progress.json()
-    con.set("status:" + str(progress.uuid), json_str)
+    con.set("status:" + str(progress.uuid), json_str, ex=36000)
