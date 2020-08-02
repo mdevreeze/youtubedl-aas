@@ -1,10 +1,11 @@
 import redis
 from ..models.progress import Progress
+from ..config import settings
 
 
 def get_redis_connection():
     r = redis.Redis(host="ydlaas.redis.cache.windows.net", port=6380, db=0,
-                    password="VpFXO0Jk599qhKM38goalkxmqV2BFwETUoZsKr23azk=", ssl=True)
+                    password=settings.redis_key, ssl=True)
     return r
 
 

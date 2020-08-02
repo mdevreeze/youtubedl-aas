@@ -14,7 +14,6 @@ from api.processing.gif import convert_to_gif, optimize_gif
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 app = FastAPI()
-app.mount('/js', StaticFiles(directory=dir_path + "/js"))
 templates = Jinja2Templates(directory=dir_path + "/views")
 
 
