@@ -6,6 +6,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 from youtube_dl import YoutubeDL, DownloadError
 from api.models import Video, Progress
 from api.storage.redis_storage import get_status, set_status
@@ -14,6 +15,14 @@ from api.processing.gif import convert_to_gif, optimize_gif
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 templates = Jinja2Templates(directory=dir_path + "/views")
 
 

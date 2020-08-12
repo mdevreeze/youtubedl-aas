@@ -3,8 +3,8 @@
     <b-field label="URL:">
       <b-input 
         placeholder="Enter full video URL here" 
-        icon-pack="fas"
-        icon="website"
+        icon="magnify"
+        v-model="url"
         rounded>
         </b-input>
     </b-field>
@@ -21,7 +21,7 @@
     },
     methods: {
       clickMe() {
-        this.
+          this.$emit('submit', this.url)
       }
     }
   }

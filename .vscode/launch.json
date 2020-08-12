@@ -4,6 +4,18 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "Launch via NPM",
+          "runtimeExecutable": "npm",
+          "cwd": "${workspaceFolder}/app",
+          "runtimeArgs": [
+              "run",
+              "serve"
+          ],
+          "port": 9229
+      },
     {
       "name": "Python: Huidige bestand",
       "type": "python",
