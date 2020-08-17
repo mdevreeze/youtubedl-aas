@@ -7,6 +7,8 @@
 
 <script lang="js">
 import UrlInput from "./url-input.vue"
+import * as config from "@/config"
+
 export default {
   data() {
     return { url: "", status: "none" }
@@ -17,7 +19,7 @@ export default {
   methods: {
     submitUrl: function(url) {
       this.url = url
-      fetch('https://8000-c83fa473-6d1c-4b18-8f0b-aab8d4e1eb58.ws-us02.gitpod.io/', {
+      fetch(config.API_BASE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
