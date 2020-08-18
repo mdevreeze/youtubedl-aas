@@ -34,6 +34,8 @@ def retrieve_status(progress_uuid: UUID):
     return {
         "status": progress.status,
         "filename": progress.filename,
+        "progress": progress.current,
+        "progress_total": progress.total,
         "gif_filename": progress.gif_filename
     }
 
