@@ -2,6 +2,10 @@ from __future__ import unicode_literals
 import os
 from datetime import datetime, timedelta
 from uuid import UUID, uuid4
+import logging
+import random
+import time
+import string
 import uvicorn
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.staticfiles import StaticFiles
@@ -11,6 +15,14 @@ from youtube_dl import YoutubeDL, DownloadError
 from api.models import Video, Progress
 from api.storage.redis_storage import get_status, set_status
 from api.processing.gif import convert_to_gif, optimize_gif
+from opencensus.ext.azure.log_exporter import AzureLogHandler
+from .config import settings
+
+logger = logging.getLogger(__name__)
+print("Logging to ai: " + settings.ai_instrumentation_key)
+logger.addHandler(AzureLogHandler(connection_string='InstrumentationKey='+settings.ai_instrumentation_key))
+logger.setLevel(logging.INFO)
+logger.warning("App started")
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -25,6 +37,21 @@ app.add_middleware(
 
 templates = Jinja2Templates(directory=dir_path + "/views")
 
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    idem = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    properties_start = {"rid": idem, "path": request.url, "method": request.method}
+    logger.info("Request started", extra=properties_start)
+    start_time = time.time()
+    
+    response = await call_next(request)
+    
+    process_time = (time.time() - start_time) * 1000
+    formatted_process_time = '{0:.2f}'.format(process_time)
+    properties_end = {"rid": idem, "completed_in": formatted_process_time, "status_code": response.status_code}
+    logger.info("Request completed", extra=properties_end)
+    
+    return response
 
 @app.get("/{progress_uuid}/status")
 def retrieve_status(progress_uuid: UUID):
@@ -48,7 +75,7 @@ async def get(request: Request):
 
 
 @app.post("/")
-async def post(video: Video, background_tasks: BackgroundTasks):
+async def post(video: Video, background_tasks: BackgroundTasks, req: Request):
     """Download video endpoint"""
 
     progress_uuid = uuid4()
@@ -98,6 +125,7 @@ async def post(video: Video, background_tasks: BackgroundTasks):
 
         if status == 'error':
             # save error status
+            logger.error("Progress status is in error")
             update_progress()
 
     ydl_opts = {
@@ -112,6 +140,7 @@ async def post(video: Video, background_tasks: BackgroundTasks):
         except DownloadError as download_err:
             progress.status = 'error'
             set_status(progress)  # save error status
+            logger.exception(download_err)
             raise HTTPException(
                 status_code=500,
                 detail="Youtube-dl download error",
@@ -120,6 +149,7 @@ async def post(video: Video, background_tasks: BackgroundTasks):
         except Exception as exception:
             progress.status = 'error'
             set_status(progress)  # save error status
+            logger.exception(exception)
             raise HTTPException(
                 status_code=500,
                 detail="Unknown error",
