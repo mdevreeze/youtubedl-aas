@@ -1,6 +1,4 @@
-# Docker
-# Build a Docker image 
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
 
 trigger:
 - master
@@ -12,18 +10,19 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build image
+- stage: Deploy
+  displayName: Deploy docker compose
   jobs:  
-  - job: Build
-    displayName: Build
+  - job: Deplou    
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: Docker@2
-      displayName: Build an image
+    - task: DockerCompose@0
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/api/Dockerfile'
-        tags: |
-          $(tag)
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscription: 'Visual Studio Enterprise – MPN(ec1db022-e248-4a95-b1ee-c9abbfdda9c3)'
+        azureContainerRegistry: '{"loginServer":"youtubedlaascr.azurecr.io", "id" : "/subscriptions/ec1db022-e248-4a95-b1ee-c9abbfdda9c3/resourceGroups/youtubedl-aas/providers/Microsoft.ContainerRegistry/registries/youtubedlaascr"}'
+        dockerComposeFile: '**/docker-compose.yml'
+        action: 'Run services'
+    # Build a Docker image 
+    # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
