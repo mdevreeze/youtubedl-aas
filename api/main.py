@@ -11,16 +11,15 @@ from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
-from youtube_dl import YoutubeDL, DownloadError
-from api.models import Video, Progress
-from api.storage.redis_storage import get_status, set_status
-from api.processing.gif import convert_to_gif, optimize_gif
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from opencensus.ext.azure.log_exporter import AzureLogHandler
-from .config import settings
+from youtube_dl import YoutubeDL, DownloadError
+from models import Video, Progress
+from storage import get_status, set_status, store_delete_file
+from processing.gif import convert_to_gif, optimize_gif
+from config.config import settings
 
 logger = logging.getLogger(__name__)
-print("Logging to ai: " + settings.ai_instrumentation_key)
-logger.addHandler(AzureLogHandler(connection_string='InstrumentationKey='+settings.ai_instrumentation_key))
 logger.setLevel(logging.INFO)
 logger.warning("App started")
 
@@ -63,7 +62,8 @@ def retrieve_status(progress_uuid: UUID):
         "filename": progress.filename,
         "progress": progress.current,
         "progress_total": progress.total,
-        "gif_filename": progress.gif_filename
+        "gif_url": progress.gif_url,
+        "mp4_url": progress.mp4_url
     }
 
 
@@ -118,6 +118,10 @@ async def post(video: Video, background_tasks: BackgroundTasks, req: Request):
                 # status gif optimization
                 optimize_gif(progress.gif_filename)
             progress.status = 'finished'
+            blob_filename = progress.uuid.hex + ".mp4"
+            blob_gif_filename =  progress.uuid.hex + ".gif"
+            progress.mp4_url = store_delete_file(progress.filename, blob_filename)
+            progress.gif_url = store_delete_file(progress.gif_filename, blob_gif_filename)
             # save finished status
             update_progress()
         else:
@@ -157,4 +161,7 @@ async def post(video: Video, background_tasks: BackgroundTasks, req: Request):
             )
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+else:
+    logger.addHandler(AzureLogHandler(connection_string='InstrumentationKey='+settings.ai_instrumentation_key))
+    print("Logging to ai: " + settings.ai_instrumentation_key)

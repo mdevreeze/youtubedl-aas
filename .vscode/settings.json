@@ -10,5 +10,7 @@
     "pylint",
     "uvicorn"
   ],
-  "python.linting.pylintEnabled": true
+  "python.linting.pylintEnabled": true,
+  "python.pythonPath": "api/env/bin/python3",
+  "python.autoComplete.extraPaths": ["./api"]
 }

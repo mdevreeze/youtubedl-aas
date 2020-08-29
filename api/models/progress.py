@@ -18,6 +18,8 @@ class Progress(BaseModel):
     current: int = None
     total: int = None
     last_update: datetime = None
+    mp4_url: str = None
+    gif_url: str = None
 
     class Config:
         json_loads = orjson.loads

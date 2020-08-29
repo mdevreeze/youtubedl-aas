@@ -1,6 +1,6 @@
 import redis
-from ..models.progress import Progress
-from ..config import settings
+from models.progress import Progress
+from config.config import settings
 
 
 def get_redis_connection():

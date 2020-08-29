@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="section">
     <b-field label="URL:">
       <b-input 
         placeholder="Enter full video URL here" 
@@ -8,7 +8,7 @@
         rounded>
         </b-input>
     </b-field>
-    <b-button @click="clickMe">Click Me</b-button>
+    <b-button @click="submit">Submit</b-button>
   </section>
 </template>
 
@@ -20,7 +20,7 @@
       }
     },
     methods: {
-      clickMe() {
+      submit() {
           this.$emit('submit', this.url)
       }
     }
