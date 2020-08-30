@@ -9,20 +9,19 @@ resources:
 variables:
   tag: '$(Build.BuildId)'
 
-stages:
-- stage: Deploy
-  displayName: Deploy docker compose
-  jobs:  
-  - job: Deplou    
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: DockerCompose@0
-      inputs:
-        containerregistrytype: 'Azure Container Registry'
-        azureSubscription: 'Visual Studio Enterprise – MPN(ec1db022-e248-4a95-b1ee-c9abbfdda9c3)'
-        azureContainerRegistry: '{"loginServer":"youtubedlaascr.azurecr.io", "id" : "/subscriptions/ec1db022-e248-4a95-b1ee-c9abbfdda9c3/resourceGroups/youtubedl-aas/providers/Microsoft.ContainerRegistry/registries/youtubedlaascr"}'
-        dockerComposeFile: '**/docker-compose.yml'
-        action: 'Run services'
-    # Build a Docker image 
-    # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+pool:
+  vmImage: 'ubuntu-latest'
+    
+steps:
+  - task: Docker@2
+    displayName: Build Api image
+    inputs:
+      repository: youtubedlk-aas-api
+      command: build
+      Dockerfile: api/Dockerfile
+  - task: Docker@2
+    displayName: Build Web app image
+    inputs:
+      repository: youtubedlk-aas-app
+      command: build
+      Dockerfile: app/Dockerfile
