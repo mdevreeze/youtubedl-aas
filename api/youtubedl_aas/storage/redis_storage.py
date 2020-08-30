@@ -1,11 +1,16 @@
 import redis
-from models.progress import Progress
-from config.config import settings
+from youtubedl_aas.models import Progress
+from youtubedl_aas.config import settings
 
 
 def get_redis_connection():
-    r = redis.Redis(host="ydlaas.redis.cache.windows.net", port=6380, db=0,
-                    password=settings.redis_key, ssl=True)
+    r = redis.Redis(
+        host="ydlaas.redis.cache.windows.net",
+        port=6380,
+        db=0,
+        password=settings.redis_key,
+        ssl=True,
+    )
     return r
 
 

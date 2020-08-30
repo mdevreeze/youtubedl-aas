@@ -2,6 +2,7 @@ from uuid import UUID
 from datetime import datetime
 import orjson
 from pydantic import BaseModel
+from pydantic.networks import HttpUrl
 
 
 def orjson_dumps(v, *, default):
@@ -10,6 +11,7 @@ def orjson_dumps(v, *, default):
 
 class Progress(BaseModel):
     """Keeps the progress information of a download/conversion"""
+
     uuid: UUID
     status: str
     filename: str = None
@@ -24,3 +26,12 @@ class Progress(BaseModel):
     class Config:
         json_loads = orjson.loads
         json_dumps = orjson_dumps
+
+
+class Video(BaseModel):
+    """Post input for root call"""
+
+    url: HttpUrl
+    optimize: bool = True
+    start_seconds: int = None
+    stop_seconds: int = None

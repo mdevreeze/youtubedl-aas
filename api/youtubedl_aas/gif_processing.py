@@ -37,7 +37,7 @@ def convert_to_gif(uuid, video_filename, update_progress):
 
     gif_name = os.path.splitext(video_filename)[0] + ".gif"
     clip = VideoFileClip(video_filename)
-    #pylint: disable=no-member
+    # pylint: disable=no-member
     clip.subclip(0, 5)
 
     if clip.w > 480:

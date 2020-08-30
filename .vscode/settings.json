@@ -8,9 +8,12 @@
     "pydantic",
     "pygifsicle",
     "pylint",
-    "uvicorn"
+    "uvicorn",
+    "youtubedl"
   ],
-  "python.linting.pylintEnabled": true,
+  "python.linting.flake8Args": [
+    "--max-line-length=120",
+  ],
   "python.pythonPath": "api/env/bin/python3",
   "python.autoComplete.extraPaths": ["./api"]
 }
