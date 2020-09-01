@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
-import * as config from "./config"
 
 Vue.config.productionTip = false
 Vue.use(Buefy)
@@ -14,7 +13,7 @@ new Vue({
 var appInsights = // ... 
 ({ 
   samplingPercentage: 20, 
-  instrumentationKey: config.INSTRUMENTATION_KEY
+  instrumentationKey: process.env.INSTRUMENTATION_KEY
 }); 
 
 window.appInsights = appInsights; 

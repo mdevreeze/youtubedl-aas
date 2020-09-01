@@ -1,6 +1,6 @@
 import redis
 from youtubedl_aas.models import Progress
-from youtubedl_aas.config import settings
+from youtubedl_aas.config import REDIS_KEY
 
 
 def get_redis_connection():
@@ -8,7 +8,7 @@ def get_redis_connection():
         host="ydlaas.redis.cache.windows.net",
         port=6380,
         db=0,
-        password=settings.redis_key,
+        password=REDIS_KEY,
         ssl=True,
     )
     return r

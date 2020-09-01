@@ -18,7 +18,6 @@
 <script lang="js">
 import UrlInput from "./url-input.vue"
 import Progress from "./progress.vue"
-import * as config from "@/config"
 
 export default {
   data() {
@@ -39,7 +38,7 @@ export default {
   methods: {
     submitUrl: function(url) {
       this.url = url
-      fetch(config.API_BASE_URL, {
+      fetch(process.env.API_BASE_URL, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -64,7 +63,7 @@ export default {
           return;
         }
 
-        fetch(`${config.API_BASE_URL}/${this.id}/status`, {
+        fetch(`${process.env.API_BASE_URL}/${this.id}/status`, {
           headers: { 'Accept': 'application/json' }
         })
         .then(r => r.json())

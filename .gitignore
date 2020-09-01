@@ -1,7 +1,4 @@
 api/output
-api/config.py
-
-app/src/config.js
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

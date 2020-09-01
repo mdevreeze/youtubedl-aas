@@ -11,3 +11,4 @@ redis
 aiofiles
 opencensus-ext-azure
 azure-storage-blob
+python-dotenv
