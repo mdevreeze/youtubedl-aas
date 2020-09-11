@@ -5,11 +5,17 @@
     <b-tabs v-if="status === 'finished'">
       <b-tab-item label="gif">
         <img :src="result_gif" alt="result gif"/>
+        <p>
+        <a :href="result_gif" download>Download</a>
+        </p>
       </b-tab-item>
       <b-tab-item label="mp4">
         <video controls>
           <source :src="result_mp4" type="video/mp4">
         </video>
+        <p>
+          <a :href="result_mp4" download>Download</a>
+        </p>
       </b-tab-item>
     </b-tabs>
   </section>
@@ -38,7 +44,7 @@ export default {
   methods: {
     submitUrl: function(url) {
       this.url = url
-      fetch(process.env.API_BASE_URL, {
+      fetch(process.env.VUE_APP_API_BASE_URL, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -63,7 +69,7 @@ export default {
           return;
         }
 
-        fetch(`${process.env.API_BASE_URL}/${this.id}/status`, {
+        fetch(`${process.env.VUE_APP_API_BASE_URL}/${this.id}/status`, {
           headers: { 'Accept': 'application/json' }
         })
         .then(r => r.json())
